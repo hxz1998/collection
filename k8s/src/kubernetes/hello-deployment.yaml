@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: k8s-hello-world
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: k8s-hello-world
+  template:
+    metadata:
+      labels:
+        app: k8s-hello-world
+    spec:
+      containers:
+        - name: k8s-hello-world
+          image: k8s-docker:0.0.1-SNAPSHOT
+          imagePullPolicy: Never  # 不要从远程仓库拉取
+          ports:
+            - name: http
+              containerPort: 8080 # 此处定义POD暴露的端口

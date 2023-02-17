@@ -1,0 +1,37 @@
+apiVersion: diagnosis.kubediag.org/v1
+kind: Operation
+metadata:
+  name: all-diagnosis-operation
+spec:
+  processor:
+    scriptRunner:
+      script: |
+        #!/usr/bin/env bash
+        echo $1
+        docker exec `docker ps | grep $1 | awk 'NR==1{print $1}'` jmap -dump:live,format=b,file=$1-heap.bin 1
+      argKeys:
+        - pod
+      operationResultKey: "result"
+    timeoutSeconds: 60
+---
+apiVersion: diagnosis.kubediag.org/v1
+kind: OperationSet
+metadata:
+  name: all-diagnosis-operationset
+spec:
+  adjacencyList:
+    - id: 0
+      to:
+        - 1
+    - id: 1
+      operation: all-diagnosis-operation
+---
+apiVersion: diagnosis.kubediag.org/v1
+kind: Diagnosis
+metadata:
+  name: all-diagnosis
+spec:
+  operationSet: all-diagnosis-operationset
+  nodeName: k8sdev-virtual-machine
+  parameters:
+    "pod": kpgs-deployment-79c8764d65-m76r4

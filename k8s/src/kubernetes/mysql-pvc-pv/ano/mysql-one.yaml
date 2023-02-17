@@ -1,0 +1,120 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-ssd
+  annotations:
+    storageclass.kubernetes.io/is-default-class: "false"
+provisioner: nfs-client
+parameters:
+  archiveOnDelete: "true"
+mountOptions:
+  - hard
+  - nfsvers=4
+
+---
+# MySQL配置，主要配置的是密码
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config-map
+data:
+  MYSQL_ROOT_PASSWORD: '666666'
+
+---
+
+# 数据存储卷
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv-data-mysql
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: nfs-ssd
+  nfs:
+    server: 192.168.3.133
+    path: /data/share/mysql
+
+---
+# MySQL有状态资源
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  replicas: 1
+  serviceName: mysql-service
+  selector:
+    matchLabels:
+      app: mysql
+  template:
+    metadata:
+      labels:
+        app: mysql
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:5.7
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: mysql
+              containerPort: 3306
+              protocol: TCP
+          envFrom:
+            - configMapRef:
+                name: mysql-config-map
+          resources:
+            requests:
+              memory: 512Mi
+            limits:
+              memory: 512Mi
+          volumeMounts:
+            - name: mysql-data
+              mountPath: /var/lib/mysql
+      imagePullSecrets:
+        - name: k8s-auth
+  volumeClaimTemplates:
+    - metadata:
+        name: mysql-data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        volumeMode: Filesystem
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: nfs-ssd
+
+---
+# 内部访问的headless服务
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-service
+spec:
+  selector:
+    app: mysql
+  ports:
+    - name: mysql
+      port: 3306
+  clusterIP: None
+
+---
+# 外部使用的服务
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-external-service
+spec:
+  selector:
+    app: mysql
+  ports:
+    - name: mysql
+      protocol: TCP
+      port: 3306
+      targetPort: 3306
+      nodePort: 30306
+  type: NodePort

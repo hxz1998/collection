@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: java-profiler
+  namespace: kubediag
+  labels:
+    app: java-profiler
+spec:
+  selector:
+    matchLabels:
+      app: java-profiler
+  template:
+    metadata:
+      labels:
+        app: java-profiler
+    spec:
+      containers:
+        - command:
+            - /java-profiler
+          args:
+            - --address=$(POD_IP)
+            - --port=8000
+          name: java-profiler
+          image: hub.c.163.com/kubediag/java-profiler:v0.1.0
+          env:
+            - name: POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+          securityContext:
+            privileged: true
+          volumeMounts:
+            - name: kubediag
+              mountPath: /var/lib/kubediag
+            - name: home
+              mountPath: /home
+      terminationGracePeriodSeconds: 30
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      securityContext:
+        runAsNonRoot: false
+        runAsUser: 0
+      volumes:
+        - name: kubediag
+          hostPath:
+            path: /var/lib/kubediag
+        - name: home
+          hostPath:
+            path: /home
+---
+apiVersion: diagnosis.kubediag.org/v1
+kind: Operation
+metadata:
+  name: java-profiler
+spec:
+  processor:
+    httpServer:
+      port: 8000
+      path: /
+      scheme: http
+    timeoutSeconds: 300
+---
+apiVersion: diagnosis.kubediag.org/v1
+kind: OperationSet
+metadata:
+  name: java-profiler
+spec:
+  adjacencyList:
+    - id: 0
+      to:
+        - 1
+    - id: 1
+      operation: java-profiler
+---
+apiVersion: diagnosis.kubediag.org/v1
+kind: Diagnosis
+metadata:
+  name: memory-analyzer
+spec:
+  parameters:
+    profiler.java.type: "MemoryAnalyzer"
+    profiler.java.timeout_seconds: "120"
+    profiler.java.hprof.filepath: "/home/heapdump.hprof"
+  operationSet: java-profiler
+  nodeName: k8sdev-virtual-machine

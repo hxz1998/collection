@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: kpgs-monitoring
+  labels:
+    app: kpgs
+spec:
+  endpoints:
+    - port: kpgs-app-deploy-svc-api
+      interval: 5s
+      scheme: http
+      path: '/actuator/prometheus'
+  selector:
+    matchLabels:
+      app: kpgs-app-deploy-svc

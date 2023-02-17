@@ -1,0 +1,10 @@
+apiVersion: diagnosis.kubediag.org/v1
+kind: Diagnosis
+metadata:
+  name: http-operation
+spec:
+  operationSet: http-operation
+  nodeName: k8sdev-virtual-machine
+  parameters:
+    b: "200"
+    f: "6"

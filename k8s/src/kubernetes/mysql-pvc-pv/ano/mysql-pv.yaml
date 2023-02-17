@@ -1,0 +1,50 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: k8s-pv-my1
+  labels:
+    type: mysql
+spec:
+  capacity:
+    storage: 2Gi
+  storageClassName: nfs-ssd-mysql
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    path: /data/share/mysql
+    server: 192.168.3.133
+  persistentVolumeReclaimPolicy: Retain
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: k8s-pv-my2
+  labels:
+    type: mysql
+spec:
+  capacity:
+    storage: 2Gi
+  storageClassName: nfs-ssd-mysql
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    path: /data/share/mysql
+    server: 192.168.3.133
+  persistentVolumeReclaimPolicy: Retain
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: k8s-pv-my3
+  labels:
+    type: mysql
+spec:
+  capacity:
+    storage: 2Gi
+  storageClassName: nfs-ssd-mysql
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    path: /data/share/mysql
+    server: 192.168.3.133
+  persistentVolumeReclaimPolicy: Retain
