@@ -1,2 +1,7 @@
-# collection
-Some practices.
+# Collection
+
+## 介绍
+
+该项目是一个简要的项目模板仓库，用来保存一些简单工程的示例。
+
+
