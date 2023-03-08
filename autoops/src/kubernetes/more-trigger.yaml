@@ -1,0 +1,17 @@
+apiVersion: diagnosis.kubediag.org/v1
+kind: Trigger
+metadata:
+  name: more-trigger
+spec:
+  operationSet: go-profiler
+  parameters:
+    param.diagnoser.runtime.go_profiler.expiration_seconds: "7200"
+    param.diagnoser.runtime.go_profiler.type: Heap
+    param.diagnoser.runtime.go_profiler.source: https://192.168.3.133:6443
+    param.diagnoser.runtime.go_profiler.tls.secret_reference.namespace: kubediag
+    param.diagnoser.runtime.go_profiler.tls.secret_reference.name: apiserver-profiler-sa-token-ss79b
+  sourceTemplate:
+    prometheusAlertTemplate:
+      regexp:
+        alertName: Watchdog
+      nodeNameReferenceLabel: node

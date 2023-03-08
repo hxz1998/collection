@@ -1,0 +1,18 @@
+apiVersion: diagnosis.kubediag.org/v1
+kind: Trigger
+metadata:
+  name: ano-trigger
+spec:
+  operationSet:
+  sourceTemplate:
+    prometheusAlertTemplate:
+      regexp:
+        alertName: diskFree
+      nodeNameReferenceLabel: instance
+      podNameReferenceLabel: pod
+      podNamespaceReferenceLabel: namespace
+      containerReferenceLabel: container
+      parameterInjectionLabels:
+        - endpoint
+        - service
+        - severity
