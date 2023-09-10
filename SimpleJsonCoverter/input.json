@@ -1,0 +1,41 @@
+{
+  "id": 123,
+  "name": "John",
+  "addresses": [
+    {
+      "street": "123 Main St",
+      "city": "New York",
+      "country": "USA",
+      "zipCode": 10001,
+      "geoLocation": {
+        "latitude": 40.7128,
+        "longitude": -74.006
+      }
+    },
+    {
+      "street": "321 Wall St",
+      "city": "Los Angeles",
+      "country": "USA",
+      "zipCode": 90001,
+      "geoLocation": {
+        "latitude": 34.0522,
+        "longitude": -118.2437
+      }
+    }
+  ],
+  "contact": {
+    "email": "john@example.com",
+    "phones": [
+      {
+        "type": "home",
+        "number": "123-456-7890"
+      },
+      {
+        "type": "work",
+        "number": "987-654-3210"
+      }
+    ]
+  },
+  "isVerified": true,
+  "rating": 4
+}
