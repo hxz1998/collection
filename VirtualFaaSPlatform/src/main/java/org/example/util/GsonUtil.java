@@ -9,6 +9,7 @@ package org.example.util;
 
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class GsonUtil {
 
@@ -16,13 +17,20 @@ public class GsonUtil {
 
     }
 
-    private static Gson gson;
+    private static final Gson gson;
 
     static {
-        gson = new Gson();
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(Class.class, new ClassTypeAdapter());
+        gson = gsonBuilder.create();
+
     }
 
-    public static <R> R covert(String jsonString, Class<R> clazz) {
+    public static <R> R toObject(String jsonString, Class<R> clazz) {
         return gson.fromJson(jsonString, clazz);
+    }
+
+    public static <T> String toJson(T data) {
+        return gson.toJson(data);
     }
 }

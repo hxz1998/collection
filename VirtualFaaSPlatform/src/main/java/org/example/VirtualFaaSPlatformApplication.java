@@ -17,6 +17,5 @@ public class VirtualFaaSPlatformApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(VirtualFaaSPlatformApplication.class);
-        log.info("启动成功");
     }
 }

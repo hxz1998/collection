@@ -9,6 +9,7 @@ package org.example;
 
 import java.lang.reflect.InvocationTargetException;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.codehaus.commons.compiler.CompileException;
 import org.codehaus.janino.ExpressionEvaluator;
 import org.example.engine.Engine;
@@ -20,15 +21,16 @@ import org.example.util.GsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+@Component("expressionEngine")
 @Setter(onMethod_ = {@Autowired})
+@Slf4j
 public class ExpressionEngine implements Engine {
 
     private ExpressionStorage expressionStorage;
 
     @Override
     public String handle(Event event, Context context) {
-        ExpressionData expressionData = GsonUtil.covert(event.getData(), ExpressionData.class);
+        ExpressionData expressionData = GsonUtil.toObject(event.getData(), ExpressionData.class);
         ExpressionEntity expressionEntity = expressionStorage.getExpression(expressionData.getKey());
         String ret;
         try {
@@ -39,10 +41,18 @@ public class ExpressionEngine implements Engine {
                 expressionEntity.getParameterTypes()
             );
             ret = ee.evaluate(getParameterValues(expressionData.getContent(), expressionEntity.getParameterTypes())).toString();
+            log.info("计算表达式 {} 的值为 {}", expressionEntity.getExpression(), ret);
         } catch (CompileException | InvocationTargetException | NoSuchMethodException | IllegalAccessException e) {
             throw new RuntimeException(e);
         }
         return ret;
+    }
+
+    @Override
+    public void register(Event event, Context context) {
+        ExpressionEntity entity = GsonUtil.toObject(event.getData(), ExpressionEntity.class);
+        expressionStorage.addExpression(entity.getKey(), entity);
+        log.info("Register a expression: {}", entity);
     }
 
     private Object[] getParameterValues(String content, Class<?>[] parameterTypes) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
