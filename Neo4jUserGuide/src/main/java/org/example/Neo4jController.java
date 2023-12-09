@@ -10,6 +10,7 @@ package org.example;
 import jakarta.websocket.server.PathParam;
 import java.util.List;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import org.example.model.Person;
 import org.example.repository.PersonRelationshipRepository;
 import org.example.repository.PersonRepository;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/neo4j/")
 @Setter(onMethod_ = {@Autowired})
+@Slf4j
 public class Neo4jController {
 
     private Neo4jTemplate neo4jTemplate;
@@ -59,7 +61,7 @@ public class Neo4jController {
         try {
             personRelationshipRepository.createRelationShipBetweenTwoPerson(lhs, rhs);
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Create relation failed.", e);
             return "fail";
         }
         return "success";

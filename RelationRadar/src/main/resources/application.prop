@@ -1,0 +1,5 @@
+spring.neo4j.uri=bolt://remote:7687
+spring.neo4j.authentication.username=
+spring.neo4j.authentication.password=
+spring.data.neo4j.database=relationradartest
+

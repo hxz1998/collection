@@ -1,0 +1,7 @@
+server.port=10893
+
+spring.neo4j.uri=
+spring.neo4j.authentication.username=
+spring.neo4j.authentication.password=
+spring.data.neo4j.database=
+
