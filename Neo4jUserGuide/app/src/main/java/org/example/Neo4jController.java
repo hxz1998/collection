@@ -1,7 +1,6 @@
 /**
  * Neo4jUserGuide
  *
- * @Description: TODO
  * @Author: cherry
  * @Create on: 2023/11/19
  **/
@@ -9,6 +8,7 @@ package org.example;
 
 import jakarta.websocket.server.PathParam;
 import java.util.List;
+import lombok.AccessLevel;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.example.model.Person;
@@ -16,8 +16,10 @@ import org.example.repository.PersonRelationshipRepository;
 import org.example.repository.PersonRepository;
 import org.example.util.GsonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.neo4j.core.FluentFindOperation.ExecutableFind;
 import org.springframework.data.neo4j.core.Neo4jTemplate;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +37,12 @@ public class Neo4jController {
     private PersonRepository personRepository;
     private PersonRelationshipRepository personRelationshipRepository;
 
+    private KafkaTemplate<String, String> kafkaClient;
+
+    @Setter(AccessLevel.NONE)
+    @Value("${biz.neo4j-user-guide.topic}")
+    private String kafkaTopic;
+
     @GetMapping("/getAll")
     public String getAll() {
         ExecutableFind<Person> result = neo4jTemplate.find(Person.class);
@@ -44,6 +52,7 @@ public class Neo4jController {
     @PostMapping("/add")
     public String addPerson(@RequestBody Person person) {
         Person result = neo4jTemplate.save(person);
+        kafkaClient.send(kafkaTopic, GsonUtil.toJson(result));
         return GsonUtil.toJson(result);
     }
 
