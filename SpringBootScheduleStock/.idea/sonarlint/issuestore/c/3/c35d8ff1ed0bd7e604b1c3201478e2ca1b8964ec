@@ -1,0 +1,17 @@
+
+h
+java:S2259/"FA "NullPointerException" could be thrown; "getBody()" can return null.(Î¸Ù‡øÿÿÿÿ8‡šÏÉ1
+t
+java:S2095."RUse try-with-resources or close this "BufferedOutputStream" in a "finally" clause.(ÙâŞÿÿÿÿÿ8¶òœÏÉ1
+X	java:S125("<This block of commented-out lines of code should be removed.(Æÿ…•8¦ë˜ÏÉ1
+]	java:S125*"<This block of commented-out lines of code should be removed.(¨ ÈÃşÿÿÿÿ8ÑØ›ÏÉ1
+L	java:S1060"+Replace this use of System.out by a logger.(ûÊº¥øÿÿÿÿ8¾¡šÏÉ1
+`
+java:S1128">Remove this unused import 'ch.qos.logback.core.util.FileUtil'.(üåïïşÿÿÿÿ8¿¡šÏÉ1
+\
+java:S1128":Remove this unused import 'java.io.FileNotFoundException'.(·î™ùÿÿÿÿ8«®ÏÉ1
+L
+java:S1128
+"*Remove this unused import 'java.util.Map'.(¼è½Òşÿÿÿÿ8¿¡šÏÉ1
+i
+java:S1128"MRemove this unused import 'org.apache.tomcat.util.http.fileupload.FileUtils'.(Š¶¯K8¿¡šÏÉ1

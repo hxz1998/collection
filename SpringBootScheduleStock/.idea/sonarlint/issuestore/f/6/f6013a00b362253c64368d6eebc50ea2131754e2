@@ -1,0 +1,11 @@
+
+Z	Web:S5254"@Add "lang" and/or "xml:lang" attributes to this "<html>" element(œ÷Ãûÿÿÿÿ
+OWeb:AvoidCommentedOutCodeCheck¡"Remove this commented out code.(€Ğ±‡úÿÿÿÿ
+IWeb:TableWithoutCaptionCheck±" Add a description to this table.(™º ñ
+;	Web:S5256±"%Add "<th>" headers to this "<table>".(™º ñ
+HWeb:ImgWithoutAltCheckÆ"%Add an "alt" attribute to this image.(Ğò“ÿ
+A	css:S4649À"&Unexpected missing generic font family(ÑÀû–ıÿÿÿÿ
+<	css:S4649É"&Unexpected missing generic font family(ªôô§
+€	css:S4666Ô"jUnexpected duplicate selector ".footer2016 .icon_emwxqr, .footer2016 .icon_jjwxqr", first used at line 208(¦Œİ¡
+‹	css:S4666Ü"uUnexpected duplicate selector ".footer2016 .footertg a:link, .footer2016 .footertg a:visited", first used at line 203(Óöæñ
+2	css:S4667´"Unexpected empty source(úÑã‡ıÿÿÿÿ
